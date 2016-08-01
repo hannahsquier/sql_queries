@@ -325,7 +325,7 @@ ORDER BY mdate, matchid, team1, team2
 
 ##More JOIN
 
-1. 
+1.
 ```sql
 SELECT id, title
  FROM movie
@@ -381,7 +381,7 @@ SELECT name
 WHERE movie.title="Alien"
 ```
 
-9. 
+9.
 ```sql
 SELECT title
   FROM movie JOIN casting ON id=movieid JOIN actor ON actorid=actor.id
@@ -408,7 +408,7 @@ SELECT actor.name
   FROM actor JOIN casting ON actorid=id JOIN movie ON movie.id=movieid
   WHERE ord = 1
  GROUP BY actor.name
- HAVING COUNT(*) >= 30 
+ HAVING COUNT(*) >= 30
 ```
 
 15.
@@ -419,22 +419,126 @@ SELECT movie.title, COUNT(*) AS actor_count
  GROUP BY title
  ORDER BY actor_count DESC
 ```
-
-16.
+##Count and Sum
+1.
 ```sql
 SELECT SUM(population)
 FROM world
 ```
 
-17.
+2.
 ```
 SELECT DISTINCT continent
   FROM world
 ```
 
-18.
+3.
 ```sql
 SELECT SUM(gdp)
   FROM world
  WHERE continent="Africa"
+```
+
+4.
+```sql
+ SELECT COUNT(*)
+FROM world
+WHERE area > 1000000
+```
+
+5.
+```sql
+SELECT sum(population)
+FROM world
+WHERE name IN ('France','Germany','Spain')
+```
+
+6.
+```sql
+SELECT continent, COUNT(*)
+FROM world
+GROUP BY continent
+```
+
+7.
+```sql
+SELECT continent, COUNT(*)
+FROM world
+WHERE population > 10000000
+GROUP BY continent
+```
+
+8.
+```sql
+SELECT continent
+FROM world
+GROUP BY continent
+HAVING SUM(population) > 100000000
+```
+
+##SELECT within SELECT
+
+1.
+```sql
+SELECT name FROM world
+  WHERE population >
+     (SELECT population FROM world
+      WHERE name='Russia')
+```
+
+2.
+```sql
+SELECT name
+FROM world
+WHERE continent = 'Europe' AND gdp/population >
+(SELECT gdp/population
+FROM world
+WHERE name = 'United Kingdom')
+```
+
+3.
+```sql
+SELECT name, continent
+FROM world
+WHERE continent IN
+(SELECT continent
+FROM world
+WHERE name in ('Argentina', 'Australia'))
+ORDER BY name
+```
+
+4.
+```sql
+SELECT name, population
+FROM world
+WHERE population BETWEEN (SELECT population FROM world WHERE name='Canada') AND (SELECT population FROM world WHERE name='Poland')
+```
+
+5.
+```sql
+SELECT name,
+  CONCAT(ROUND(population / (SELECT population FROM world WHERE name='Germany') * 100, 0), '%')
+FROM world
+WHERE continent = 'Europe'
+```
+
+Self Join
+1.
+```sql
+SELECT COUNT(*)
+FROM stops
+```
+
+2.
+```
+SELECT id
+FROM stops
+WHERE name='Craiglockhart'
+```
+
+3.
+```sql
+SELECT id, name
+FROM stops JOIN route ON route.stop=stops.id
+WHERE num=4 AND company='LRT'
 ```
