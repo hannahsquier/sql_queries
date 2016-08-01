@@ -221,3 +221,53 @@ SELECT winner, subject
  WHERE yr=1984
  ORDER BY subject IN ('Physics','Chemistry'), subject,winner
  ```
+
+##Join operations
+1. 
+```sql
+SELECT goal.matchid, goal.player
+  FROM goal 
+  WHERE teamid = 'GER'
+```
+
+2. 
+```sql
+SELECT id,stadium,team1,team2
+  FROM game
+ WHERE id = 1012
+```
+
+3.
+```sql
+SELECT goal.player, goal.teamid, game.stadium, game.mdate
+  FROM game JOIN goal ON (matchid=id)
+ WHERE teamid='GER'
+```
+
+4. 
+```sql
+SELECT team1, team2, player
+  FROM game JOIN goal ON matchid=id
+ WHERE player LIKE 'Mario%'
+```
+
+5.
+```sql
+SELECT player, teamid, coach, gtime
+  FROM goal JOIN eteam ON teamid=id
+ WHERE gtime<=10
+```
+
+6.
+```sql
+SELECT mdate, teamname
+  FROM eteam JOIN game ON team1=eteam.id
+ WHERE coach='Fernando Santos'
+```
+
+7. 
+```sql
+SELECT player
+  FROM game JOIN goal ON matchid=id
+ WHERE stadium='National Stadium, Warsaw'
+```
