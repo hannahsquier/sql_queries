@@ -95,7 +95,7 @@ SELECT name,
  WHERE name LIKE 'N%'
 ```
 
-13.
+12.
 ```sql
 SELECT name, 
        CASE WHEN continent='Europe' THEN 'Eurasia'
@@ -106,4 +106,19 @@ SELECT name,
             ELSE continent END
   FROM world
  WHERE name LIKE 'A%' OR NAME LIKE 'B%'
+```
+
+13.
+```sql
+SELECT name, continent,
+       CASE WHEN continent='Oceania' THEN 'Australasia'
+       WHEN continent='Eurasia' OR name = 'Turkey' THEN 'Europe/Asia'
+       
+       WHEN continent='Europe' THEN 'Europe/Asia'
+       WHEN continent='Caribbean' AND name LIKE 'B%' THEN 'North America' 
+       WHEN continent='Caribbean' AND name NOT LIKE 'B%' THEN 'South America' 
+       ELSE continent END
+
+  FROM world 
+ ORDER BY name ASC
 ```
