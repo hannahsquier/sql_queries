@@ -314,10 +314,127 @@ GROUP BY matchid, mdate
 ```sql
 SELECT mdate,
   team1,
-  COUNT(CASE WHEN teamid=team1 THEN 1 ELSE 0 END) AS score1, team2,
-  COUNT(CASE WHEN teamid=team2 THEN 1 ELSE 0 END) AS score2
 
-  FROM game JOIN goal ON matchid = id,
-GROUP BY mdate, team1, team2, teamid
+  SUM(CASE WHEN teamid=team1 THEN 1 ELSE 0 END) AS score1, team2,
+  SUM(CASE WHEN teamid=team2 THEN 1 ELSE 0 END) AS score2
+
+  FROM game LEFT JOIN goal ON matchid = id
+GROUP BY mdate, team1, team2
 ORDER BY mdate, matchid, team1, team2
+```
+
+##More JOIN
+
+1. 
+```sql
+SELECT id, title
+ FROM movie
+ WHERE yr=1962
+```
+
+2.
+```sql
+SELECT yr
+  FROM movie
+ WHERE title="Citizen Kane"
+```
+
+3.
+```sql
+SELECT id, title, yr
+  FROM movie
+ WHERE title LIKE '%Star Trek%'
+```
+
+4.
+```sql
+SELECT title
+  FROM movie
+ WHERE id IN (11768, 11955, 21191)
+```
+
+5.
+```sql
+SELECT id
+  FROM actor
+ WHERE name="Glenn Close"
+```
+
+6.
+```sql
+SELECT id
+ FROM movie
+  WHERE title="Casablanca"
+```
+
+7.
+```sql
+SELECT name
+ FROM actor JOIN casting ON id=actorid JOIN movie ON movieid=movie.id
+WHERE movie.id="11768"
+```
+
+8.
+```sql
+SELECT name
+ FROM actor JOIN casting ON id=actorid JOIN movie ON movieid=movie.id
+WHERE movie.title="Alien"
+```
+
+9. 
+```sql
+SELECT title
+  FROM movie JOIN casting ON id=movieid JOIN actor ON actorid=actor.id
+ WHERE name="Harrison Ford"
+```
+
+10.
+```sql
+SELECT title
+  FROM movie JOIN casting ON id=movieid JOIN actor ON actorid=actor.id
+ WHERE name="Harrison Ford" AND ord > 1
+```
+
+11.
+```sql
+SELECT title, actor.name
+  FROM movie JOIN casting ON id=movieid JOIN actor ON actor.id=actorid
+ WHERE yr=1962 AND ord=1
+```
+
+14.
+```sql
+SELECT actor.name
+  FROM actor JOIN casting ON actorid=id JOIN movie ON movie.id=movieid
+  WHERE ord = 1
+ GROUP BY actor.name
+ HAVING COUNT(*) >= 30 
+```
+
+15.
+```sql
+SELECT movie.title, COUNT(*) AS actor_count
+  FROM movie JOIN casting ON movie.id=movieid JOIN actor ON actorid=actor.id
+ WHERE yr=1978
+ GROUP BY title
+ ORDER BY actor_count DESC
+```
+
+16.
+```sql
+SELECT SUM(population)
+FROM world
+```
+
+17.
+```
+SELECT DISTINCT continent
+  FROM world
+```
+
+18.
+```sql
+SELECT SUM(gdp)
+  FROM world
+ WHERE continent="Africa"
 ```
