@@ -525,7 +525,7 @@ WHERE continent = 'Europe'
 ##NULL stuff
 1.
 ```sql
-SELECT name 
+SELECT name
   FROM teacher
  WHERE dept IS NULL
 ```
@@ -557,7 +557,7 @@ SELECT name, COALESCE(mobile, '07986 444 2266')
   FROM teacher
 ```
 
-6. 
+6.
 ```sql
 SELECT teacher.name, COALESCE(dept.name, 'None')
   FROM teacher LEFT JOIN dept ON dept.id=teacher.dept
@@ -588,7 +588,7 @@ SELECT name,
 ```sql
 SELECT name,
       CASE WHEN teacher.dept=1 OR teacher.dept=2 THEN 'Sci'
-      WHEN teacher.dept=3 THEN 'Art' 
+      WHEN teacher.dept=3 THEN 'Art'
       ELSE 'None' END
   FROM teacher
 ```
@@ -630,3 +630,46 @@ FROM route a JOIN route b ON
 WHERE b.stop=149 AND a.stop=53
 ```
 
+6.
+```sql
+SELECT a.company, a.num, stopa.name, stopb.name
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+WHERE stopa.name='Craiglockhart' AND stopb.name='London Road'
+```
+
+7.
+```sql
+SELECT DISTINCT a.company, a.num
+FROM route a JOIN route b ON (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+WHERE stopa.id = 115 AND stopb.id = 137
+```
+
+8.
+```
+SELECT DISTINCT a.company, a.num
+FROM route a JOIN route b ON (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+WHERE stopa.name = 'Craiglockhart' AND stopb.name='Tollcross'
+```
+
+9.
+```sql
+SELECT DISTINCT stops.name, route.company, route.num
+FROM stops JOIN route ON stops.id = route.stop
+
+                  -- This subquery finds companies that go through Craiglockhart
+WHERE company IN (SELECT DISTINCT route.company
+                  FROM route JOIN stops ON (route.stop = stops.id)
+                  WHERE stops.name = 'Craiglockhart')
+
+                  -- This subquery finds route that go through Craiglockhart
+      AND num IN (SELECT DISTINCT route.num
+                  FROM route JOIN stops ON (route.stop = stops.id)
+                  WHERE stops.name = 'Craiglockhart')
+```
