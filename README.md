@@ -192,7 +192,7 @@ FROM nobel
 WHERE (yr < 1910 AND subject='Medicine') OR (yr >= 2004 AND subject='Literature')
 ```
 
-11. 
+11.
 ```sql
 SELECT *
 FROM nobel
@@ -223,14 +223,14 @@ SELECT winner, subject
  ```
 
 ##Join operations
-1. 
+1.
 ```sql
 SELECT goal.matchid, goal.player
-  FROM goal 
+  FROM goal
   WHERE teamid = 'GER'
 ```
 
-2. 
+2.
 ```sql
 SELECT id,stadium,team1,team2
   FROM game
@@ -244,7 +244,7 @@ SELECT goal.player, goal.teamid, game.stadium, game.mdate
  WHERE teamid='GER'
 ```
 
-4. 
+4.
 ```sql
 SELECT team1, team2, player
   FROM game JOIN goal ON matchid=id
@@ -265,9 +265,59 @@ SELECT mdate, teamname
  WHERE coach='Fernando Santos'
 ```
 
-7. 
+7.
 ```sql
 SELECT player
   FROM game JOIN goal ON matchid=id
  WHERE stadium='National Stadium, Warsaw'
+```
+
+8.
+```sql
+SELECT DISTINCT player
+  FROM game JOIN goal ON matchid = id
+    WHERE  teamid != 'GER' AND (team1='GER' OR team2='GER')
+```
+
+9.
+```sql
+SELECT teamname, COUNT(*)
+  FROM eteam JOIN goal ON id=teamid
+GROUP BY teamname
+ORDER BY teamname
+```
+
+10.
+```sql
+ SELECT stadium, COUNT(*)
+FROM game JOIN goal ON id=matchid
+GROUP BY stadium
+```
+
+11.
+```sql
+SELECT matchid, mdate, COUNT(*)
+  FROM game JOIN goal ON matchid = id
+ WHERE (team1 = 'POL' OR team2 = 'POL')
+GROUP BY matchid, mdate
+```
+
+12.
+```sql
+SELECT matchid, mdate, COUNT(*)
+FROM goal JOIN game on matchid = id
+WHERE teamid='GER'
+GROUP BY matchid, mdate
+```
+
+13.
+```sql
+SELECT mdate,
+  team1,
+  COUNT(CASE WHEN teamid=team1 THEN 1 ELSE 0 END) AS score1, team2,
+  COUNT(CASE WHEN teamid=team2 THEN 1 ELSE 0 END) AS score2
+
+  FROM game JOIN goal ON matchid = id,
+GROUP BY mdate, team1, team2, teamid
+ORDER BY mdate, matchid, team1, team2
 ```
