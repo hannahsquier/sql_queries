@@ -31,7 +31,7 @@ WHERE population>200000000
 
 3.
 ```sql
-SELECT name, 
+SELECT name,
        gdp/population AS 'per capita GDP'
    FROM world
    WHERE population > 200000000
@@ -51,9 +51,9 @@ SELECT name, population
   WHERE name IN ('France', 'Germany', 'Italy')
 ```
 
-6. 
+6.
 ```sql
-SELECT name 
+SELECT name
    FROM world
   WHERE name LIKE '%United%'
 ```
@@ -88,7 +88,7 @@ SELECT name, ROUND(gdp/population, -3) AS "per capita GDP"
 
 11.
 ```sql
-SELECT name, 
+SELECT name,
        CASE WHEN continent='Oceania' THEN 'Australasia'
             ELSE continent END
   FROM world
@@ -97,7 +97,7 @@ SELECT name,
 
 12.
 ```sql
-SELECT name, 
+SELECT name,
        CASE WHEN continent='Europe' THEN 'Eurasia'
             WHEN continent='Asia' THEN 'Eurasia'
             WHEN continent='North America' THEN 'America'
@@ -113,12 +113,93 @@ SELECT name,
 SELECT name, continent,
        CASE WHEN continent='Oceania' THEN 'Australasia'
        WHEN continent='Eurasia' OR name = 'Turkey' THEN 'Europe/Asia'
-       
-       WHEN continent='Europe' THEN 'Europe/Asia'
-       WHEN continent='Caribbean' AND name LIKE 'B%' THEN 'North America' 
-       WHEN continent='Caribbean' AND name NOT LIKE 'B%' THEN 'South America' 
+       WHEN continent='Caribbean' AND name LIKE 'B%' THEN 'North America'
+       WHEN continent='Caribbean' AND name NOT LIKE 'B%' THEN 'South America'
        ELSE continent END
 
-  FROM world 
- ORDER BY name ASC
+FROM world
+ORDER BY name ASC
+```
+
+##SELECT Nobel
+1.
+```sql
+SELECT *
+  FROM nobel
+ WHERE yr = 1950
+```
+
+2.
+```sql
+SELECT winner
+  FROM nobel
+ WHERE yr = 1962
+   AND subject = 'Literature'
+```
+
+3.
+```sql
+SELECT yr, subject
+FROM nobel
+WHERE winner = 'Albert Einstein'
+```
+
+4.
+```sql
+SELECT winner
+FROM nobel
+WHERE yr >= 2000 AND subject='Peace'
+```
+5.
+```sql
+SELECT *
+FROM nobel
+WHERE subject = 'Literature' AND yr >= 1980 AND yr <= 1989
+```
+
+6.
+```sql
+SELECT * FROM nobel
+  WHERE winner IN ('Theodore Roosevelt',
+                  'Woodrow Wilson',
+                  'Jimmy Carter')
+```
+
+7.
+```sql
+SELECT winner
+FROM nobel
+WHERE winner LIKE 'John %'
+```
+8.
+```sql
+SELECT *
+FROM nobel
+WHERE (subject='Physics' AND yr = 1980) OR (subject='Chemistry' AND yr=1984)
+```
+
+9.
+```sql
+SELECT *
+FROM nobel
+WHERE yr = 1980 AND subject != 'Chemistry' AND subject != 'Medicine'
+```
+
+10.
+```sql
+SELECT *
+FROM nobel
+WHERE (yr < 1910 AND subject='Medicine') OR (yr >= 2004 AND subject='Literature')
+```
+11.
+```sql
+SELECT *
+FROM nobel
+WHERE winner LIKE 'peter gr_nberg'
+```
+12.
+```
+SELECT *
+FROM nobel
+WHERE winner LIKE 'eugene O''neill'
 ```
