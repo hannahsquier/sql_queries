@@ -522,7 +522,78 @@ FROM world
 WHERE continent = 'Europe'
 ```
 
-Self Join
+##NULL stuff
+1.
+```sql
+SELECT name 
+  FROM teacher
+ WHERE dept IS NULL
+```
+
+2.
+```sql
+SELECT teacher.name, dept.name
+ FROM teacher INNER JOIN dept
+           ON (teacher.dept=dept.id)
+```
+
+3.
+```sql
+SELECT teacher.name, dept.name
+ FROM teacher LEFT JOIN dept
+           ON (teacher.dept=dept.id)
+```
+
+4.
+```sql
+SELECT teacher.name, dept.name
+ FROM teacher RIGHT JOIN dept
+           ON (teacher.dept=dept.id)
+```
+
+5.
+```sql
+SELECT name, COALESCE(mobile, '07986 444 2266')
+  FROM teacher
+```
+
+6. 
+```sql
+SELECT teacher.name, COALESCE(dept.name, 'None')
+  FROM teacher LEFT JOIN dept ON dept.id=teacher.dept
+```
+
+7.
+```sql
+SELECT COUNT(teacher.name), COUNT(teacher.mobile)
+  FROM teacher
+```
+
+8.
+```sql
+SELECT dept.name, COUNT(teacher.name)
+  FROM teacher RIGHT JOIN dept ON dept.id=teacher.dept
+ GROUP BY dept.name
+```
+
+9.
+```sql
+SELECT name,
+      CASE WHEN teacher.dept=1 OR teacher.dept=2 THEN 'Sci'
+      ELSE 'Art' END
+  FROM teacher
+```
+
+10.
+```sql
+SELECT name,
+      CASE WHEN teacher.dept=1 OR teacher.dept=2 THEN 'Sci'
+      WHEN teacher.dept=3 THEN 'Art' 
+      ELSE 'None' END
+  FROM teacher
+```
+
+##Self Join
 1.
 ```sql
 SELECT COUNT(*)
@@ -542,3 +613,20 @@ SELECT id, name
 FROM stops JOIN route ON route.stop=stops.id
 WHERE num=4 AND company='LRT'
 ```
+
+4.
+```sql
+SELECT company, num, COUNT(*)
+FROM route WHERE stop=149 OR stop=53
+GROUP BY company, num
+  HAVING(COUNT(*) = 2)
+```
+
+5.
+```sql
+SELECT a.company, a.num, a.stop, b.stop
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+WHERE b.stop=149 AND a.stop=53
+```
+
