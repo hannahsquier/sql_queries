@@ -191,15 +191,33 @@ SELECT *
 FROM nobel
 WHERE (yr < 1910 AND subject='Medicine') OR (yr >= 2004 AND subject='Literature')
 ```
-11.
+
+11. 
 ```sql
 SELECT *
 FROM nobel
 WHERE winner LIKE 'peter gr_nberg'
 ```
+
 12.
-```
+```sql
 SELECT *
 FROM nobel
 WHERE winner LIKE 'eugene O''neill'
 ```
+
+13.
+```sql
+SELECT winner, yr, subject
+  FROM nobel
+ WHERE winner LIKE 'Sir%'
+ORDER BY yr DESC, winner
+```
+
+14.
+```sql
+SELECT winner, subject
+  FROM nobel
+ WHERE yr=1984
+ ORDER BY subject IN ('Physics','Chemistry'), subject,winner
+ ```
